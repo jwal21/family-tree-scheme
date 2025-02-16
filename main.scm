@@ -10,16 +10,17 @@
 
 ;;Maternal branch
 (define Mb
-'(((Mary Blake) ((Ana Ali) (Theo Blake)) ((17 9 2022) ()))
-((Ana Ali) ((Ada West) (Md Ali)) ((4 10 1995) ()))
-((Theo Blake) ((Mary Jones) (Tom Blake)) ((9 5 1997) ()))
-((Greta Blake) ((Mary Jones) (Tom Blake)) ((16 3 1999) ()))
-((Mary Jones) (() ())((12 5 1967) (19 5 2024)))
-((Tom Blake) (() ()) ((17 1 1964) ()))
-((Ada West) (() ()) ((22 8 1973) ()))
-((Md Ali) (() ()) ((14 2 1972) (2 5 2023)))
-((Ned Bloom) (() ()) ((23 04 2001)()))
-((John Bloom) ((Greta Blake) (Ned Bloom)) ((5 12 2023) ()))))
+  '(((Mary Blake) ((Ana Ali) (Theo Blake)) ((17 9 2022) ()))
+  ((Ana Ali) ((Ada West) (Md Ali)) ((4 10 1995) ()))
+  ((Theo Blake) ((Mary Jones) (Tom Blake)) ((9 5 1997) ()))
+  ((Greta Blake) ((Mary Jones) (Tom Blake)) ((16 3 1999) ()))
+  ((Mary Jones) (() ())((12 5 1967) (19 5 2024)))
+  ((Tom Blake) (() ()) ((17 1 1964) ()))
+  ((Ada West) (() ()) ((22 8 1973) ()))
+  ((Md Ali) (() ()) ((14 2 1972) (2 5 2023)))
+  ((Ned Bloom) (() ()) ((23 04 2001)()))
+  ((John Bloom) ((Greta Blake) (Ned Bloom)) ((5 12 2023) ())))
+)
 
 ;,Paternal branch
 (define Pb
@@ -63,10 +64,16 @@
 (define (lst-all mb pb)
   (append-lst mb pb))
 
-;; A1
+;; A1 return the parents in the given familial branch
 (define (parents lst)
-  ())
-  
+  (apply append                          ; Gets rid of the extra nesting
+         (map (lambda (entry)                     ; Applies lambda func to each sublist
+                (let ((parent-pair (cadr entry)))          ; Accesses Parent list in the sublist
+                (filter (lambda (x) (not (null? x))) parent-pair)))      ; Removes empty lists if present in Parent list
+         lst)))
+
+
+(parents Mb)
 ;; A2
 (define (living-members lst)
   ())
