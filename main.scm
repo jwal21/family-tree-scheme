@@ -87,40 +87,90 @@
 (define (change-name-to-Juan lst old-name new-name)
   ())
  
-;;
+
+
 ;; B1
 (define (children lst)
-  ())
+  ()
+)
   
 ;; B2
 (define (oldest-living-member lst)
-  ())
+ () 
+)
   
 ;; B3
 (define (average-age-on-death lst)
   ())
   
-;; B4
+;; B4 - Find all people in the list with their birthday on X month
 (define (birthday-month-same lst month)
-  ())
+  ; Use filter to remove all people who do not match the provided month
+  (filter (lambda (person)
+            ; Check birthday is provided month
+            (if (not (null? (caaddr person)))
+                (equal? (cadr (caaddr person)) month)
+                #f))
+          lst))
   
-;; B5
+;; B5 - Return a list of all the people sorted by their first name alphabetically
 (define (sort-by-first lst)
-  ())
+  (define (first-name person)
+    ; Convert the symbol to a string (comparison only works on strings)
+    (symbol->string (car (car person))))
+
+  ; Sort by which comes first alphabetically
+  (sort lst (lambda (person1 person2)
+              (string<? (first-name person1) (first-name person2)))))
   
-;; B6
+;; B6 - Update the first name of all people called X to Y
 (define (change-name-to-Maria lst old-name new-name)
-  ())
-  
-;;
+; Apply the name substitution to each item in the list
+(map (lambda (item)
+       ; If the name is X, create a new person in their place with the name Y
+       ; Else returns unmodified person
+       (if (equal? (car (car item)) old-name)
+           (list (list new-name (cdr (car item))) (cadr item) (caddr item))
+           item))
+     lst))
+
 ;;You should include code to execute each of your functions below.
 (define ESC #\033)
 (define CSI (list->string (list ESC #\[ )))
 (define CLEAR (string-append CSI "2J"))
 (display CLEAR)
+
+; C1
 (display "Mother's side:\n")
 (lst-mb Mb)
+
+; C2
 (display "Father's side:\n")
 (lst-pb Pb)
+
+; C3
 (display "Combined mother's and father's:\n")
 (lst-all Mb Pb)
+
+; B1
+(display "Children:\n")
+(children Mb)
+
+; B2
+(display "Oldest living member:\n")
+(oldest-living-member Mb)
+
+; B3
+(display "Average age of death:\n")
+
+; B4
+(display "People born on X month:\n")
+(birthday-month-same Mb 5)
+
+; B5
+(display "Sorted by first name:\n")
+(sort-by-first Mb)
+
+; B6
+(display "Changed name to Maria from Mary:\n")
+(change-name-to-Maria Mb 'Mary 'Maria)
