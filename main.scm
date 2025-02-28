@@ -94,14 +94,43 @@
   ()
 )
   
-;; B2
+;; B2 - Get the oldest still living family member from the list
 (define (oldest-living-member lst)
- () 
+  ; Filter out all deceased people
+  (define (only-living-people lst) (filter (lambda (person) (null? (list-ref (list-ref person 2) 1))) lst))
+
+  (define (sort-list-by-DOB person-list)
+  (sort person-list
+        (lambda (person-1 person-2)
+          ; Day, month, year for for the two people to compare
+          (let ((day-1 (list-ref (list-ref (list-ref person-1 2) 0) 0))
+                (month-1 (list-ref (list-ref (list-ref person-1 2) 0) 1))
+                (year-1 (list-ref (list-ref (list-ref person-1 2) 0) 2))
+                (day-2 (list-ref (list-ref (list-ref person-2 2) 0) 0))
+                (month-2 (list-ref (list-ref (list-ref person-2 2) 0) 1))
+                (year-2 (list-ref (list-ref (list-ref person-2 2) 0) 2)))
+            ; Check which year is first, month and then day
+            (if (< year-1 year-2)
+                #t
+                (if (> year-1 year-2)
+                    #f
+                    (if (< month-1 month-2)
+                        #t
+                        (if (> month-1 month-2)
+                            #f
+                            (< day-1 day-2)))))))))
+
+  ; Return the first element in the list
+  (car (sort-list-by-DOB (only-living-people lst)))
 )
   
 ;; B3
 (define (average-age-on-death lst)
-  ())
+  ; Filter out non-deceased people
+  (define (only-deceased-people lst) (filter (lambda (person) (not (null? (list-ref (list-ref person 2) 1))) lst)))
+  
+  ()
+)
   
 ;; B4 - Find all people in the list with their birthday on X month
 (define (birthday-month-same lst month)
