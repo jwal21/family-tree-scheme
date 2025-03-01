@@ -1,4 +1,3 @@
-#lang racket
 (require lang/plt-pretty-big-text)
 
 ;;Your full name: 
