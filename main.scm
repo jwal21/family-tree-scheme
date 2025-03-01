@@ -95,7 +95,7 @@
     ; Iterate over all everyone, checking if they are orphaned in the tree
     (for-each
       (λ (person)
-        ; Append the person if they a child
+        ; Append the person if they're a child
         (if (member (car person) parents-list)
             (set! children-list (cons person children-list))))
       people-list)
