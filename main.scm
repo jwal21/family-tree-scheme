@@ -87,21 +87,39 @@
 (define (change-name-to-Juan lst old-name new-name)
   ())
  
+; B1 - Get all children (non-orphaned people from the list)
+(define (children people-list)
+  ; Find all people who are parents
+  (let ((parents-list (apply append (map (λ (person) (cadr person)) people-list)))
+        (children-list '()))
 
+    ; Iterate over all everyone, checking if they are orphaned in the tree
+    (for-each
+      (λ (person)
+        ; Append the person if they a child
+        (if (member (car person) parents-list)
+            (set! children-list (cons person children-list))))
+      people-list)
 
-;; B1
-(define (children lst)
-  ()
-)
-  
+    ; Remove duplicate children
+    (delete-duplicates children-list)))
+
+; Remove duplicated items from the list
+(define (delete-duplicates lst)
+  ; Check for base case
+  (if (null? lst)
+      '()
+      (cons (car lst)
+            (delete-duplicates (filter (λ (x) (not (equal? x (car lst)))) (cdr lst))))))
+
 ;; B2 - Get the oldest still living family member from the list
 (define (oldest-living-member lst)
   ; Filter out all deceased people
-  (define (only-living-people lst) (filter (lambda (person) (null? (list-ref (list-ref person 2) 1))) lst))
+  (define (only-living-people lst) (filter (λ (person) (null? (list-ref (list-ref person 2) 1))) lst))
 
   (define (sort-list-by-DOB person-list)
   (sort person-list
-        (lambda (person-1 person-2)
+        (λ (person-1 person-2)
           ; Day, month, year for for the two people to compare
           (let ((day-1 (list-ref (list-ref (list-ref person-1 2) 0) 0))
                 (month-1 (list-ref (list-ref (list-ref person-1 2) 0) 1))
@@ -124,18 +142,27 @@
   (car (sort-list-by-DOB (only-living-people lst)))
 )
   
-;; B3
+;; B3 - Calculate the average age at which someone dies (calculated from deceased only)
 (define (average-age-on-death lst)
-  ; Filter out non-deceased people
-  (define (only-deceased-people lst) (filter (lambda (person) (not (null? (list-ref (list-ref person 2) 1))) lst)))
-  
-  ()
-)
+; Filter out non-deceased people
+(define (only-deceased-people lst)
+  (filter (λ (person) (not (null? (list-ref (list-ref person 2) 1)))) lst))
+
+  ; Calculate average age for all deceased people
+  (let ((deceased (only-deceased-people lst)))
+         ; Combined age of everyone
+        (let ((combined-age
+                (apply + (map (λ (person)
+                                (- (list-ref (list-ref (list-ref person 2) 1) 2) ; Death year
+                                  (list-ref (list-ref (list-ref person 2) 0) 2))) ; Birth year
+                            deceased))))
+          ; Divide by number of people
+          (/ combined-age (length deceased)))))
   
 ;; B4 - Find all people in the list with their birthday on X month
 (define (birthday-month-same lst month)
   ; Use filter to remove all people who do not match the provided month
-  (filter (lambda (person)
+  (filter (λ (person)
             ; Check birthday is provided month
             (if (not (null? (caaddr person)))
                 (equal? (cadr (caaddr person)) month)
@@ -149,13 +176,13 @@
     (symbol->string (car (car person))))
 
   ; Sort by which comes first alphabetically
-  (sort lst (lambda (person1 person2)
+  (sort lst (λ (person1 person2)
               (string<? (first-name person1) (first-name person2)))))
   
 ;; B6 - Update the first name of all people called X to Y
 (define (change-name-to-Maria lst old-name new-name)
 ; Apply the name substitution to each item in the list
-(map (lambda (item)
+(map (λ (item)
        ; If the name is X, create a new person in their place with the name Y
        ; Else returns unmodified person
        (if (equal? (car (car item)) old-name)
@@ -191,6 +218,7 @@
 
 ; B3
 (display "Average age of death:\n")
+(average-age-on-death Mb)
 
 ; B4
 (display "People born on X month:\n")
