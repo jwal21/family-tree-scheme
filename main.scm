@@ -74,8 +74,20 @@
 
 
 ;; A2
+; This function should return all living members of the branch.
+;(define (living-members lst)
+ ; (if (null? lst)
+  ;    '()
+   ;   (if (not (null? (cdddar lst)))
+    ;      '() 
+     ;     (cons (car (car lst)) (living-members (cdr lst))))))
+
 (define (living-members lst)
-  ())
+  (if (null? lst)
+      '()
+      (lambda (person)
+                    (let ((death-date (cdddar person)))
+                      (filter (lambda (x) (null? death-date)) (caar lst))) (living-members (cdr lst)))))
   
 ;; A3
 (define (current-age lst)
