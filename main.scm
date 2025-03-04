@@ -58,36 +58,34 @@
 (define (lst-all mb pb)
   (append-lst mb pb))
 
-;; A1 return the parents in the given familial branch
-(define (parents lst)   
-  (define (delete-dup x)   ; Helper function that deletes duplicates in the list
+;; HELPER FUNCTIONS:
+
+; Duplicate Deletion
+(define (delete-dup x)
     (if (null? x) '()
         (cons (car x) (delete-dup (filter (lambda (y) (not (equal? y (car x))))
                                           (cdr x))))))
+
+;; A1
+; This function returns all the living people in a branch
+(define (parents lst)   
   (delete-dup   ; Calling helper function
    (apply append                          
-           (map (lambda (entry)   ; Applies lambda func to each sublist
-                  (let ((parent-pair (cadr entry)))   ; Accesses parents in the sublist
+           (map (lambda (person)   ; Applies lambda func to each sublist
+                  (let ((parent-pair (cadr person)))   ; Accesses parents in the sublist
                     (filter (lambda (x) (not (null? x))) parent-pair)))   ; Removes empty lists if present in parents list
                 lst))))
 
 
 
-;; A2
-; This function should return all living members of the branch.
-;(define (living-members lst)
- ; (if (null? lst)
-  ;    '()
-   ;   (if (not (null? (cdddar lst)))
-    ;      '() 
-     ;     (cons (car (car lst)) (living-members (cdr lst))))))
 
+;; A2
+; This function returns all living members of a branch
 (define (living-members lst)
-  (if (null? lst)
-      '()
-      (lambda (person)
-                    (let ((death-date (cdddar person)))
-                      (filter (lambda (x) (null? death-date)) (caar lst))) (living-members (cdr lst)))))
+  (define (is-alive? entry)   ; Helper function to check if person is alive
+    (null? (cadr (caddr entry))))   ; Checks that there is no death date
+
+  (map car (filter is-alive? lst)))   ; Filter extracts only the living people's entry, then mapping car to each entry returns the names
   
 ;; A3
 (define (current-age lst)
@@ -138,5 +136,11 @@
 (lst-pb Pb)
 (display "All members of the tree:\n")
 (lst-all Mb Pb)
+(display "A1:\n") 
 (display "The parents in the given branch:\n")
 (parents Mb)
+(newline)
+(display "A2:\n")
+(display "The living people in the given branch:\n")
+(living-members Mb)
+	 
