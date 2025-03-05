@@ -97,7 +97,8 @@
   
 ;; A4
 (define (same-birthday-month lst month)
-  ())
+  (filter (lambda (entry)
+            (equal? month (cadr (car (caddr entry))))) lst))
   
 ;; A5
 (define (sort-by-last lst)
@@ -151,4 +152,5 @@
 (display "A3:\n")
 (display "The ages of living people in the given branch:\n")
 (current-age Mb)
+(same-birthday-month Mb 5)
 	 
