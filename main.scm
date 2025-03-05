@@ -88,8 +88,12 @@
   (map car (filter is-alive? lst)))   ; Filter extracts only the living people's entry, then mapping car to each entry returns the names
   
 ;; A3
+; This function returns the age of all liviing members in a branch
 (define (current-age lst)
-  ())
+  (define (calc-age entry)
+    (- 2025 (caddr (car (caddr entry)))))
+
+  (map calc-age (filter is-alive? lst)))
   
 ;; A4
 (define (same-birthday-month lst month)
@@ -143,4 +147,8 @@
 (display "A2:\n")
 (display "The living people in the given branch:\n")
 (living-members Mb)
+(newline)
+(display "A3:\n")
+(display "The ages of living people in the given branch:\n")
+(current-age Mb)
 	 
