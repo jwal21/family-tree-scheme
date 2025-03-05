@@ -96,9 +96,10 @@
   (map calc-age (filter is-alive? lst)))
   
 ;; A4
+; This function returns all people with the same given birth month 
 (define (same-birthday-month lst month)
-  (filter (lambda (entry)
-            (equal? month (cadr (car (caddr entry))))) lst))
+  (map car (filter (lambda (entry)
+            (equal? month (cadr (car (caddr entry))))) lst)))
   
 ;; A5
 (define (sort-by-last lst)
@@ -140,6 +141,7 @@
 (display "Father's side:\n")
 (lst-pb Pb)
 (display "All members of the tree:\n")
+(newline)
 (lst-all Mb Pb)
 (display "A1:\n") 
 (display "The parents in the given branch:\n")
@@ -152,5 +154,9 @@
 (display "A3:\n")
 (display "The ages of living people in the given branch:\n")
 (current-age Mb)
+(newline)
+(display "A4:\n")
+(display "The people with the same given birth month:\n")
 (same-birthday-month Mb 5)
+(newline)
 	 
