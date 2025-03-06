@@ -69,8 +69,8 @@
                                           (cdr x))))))
 
 ; Function to check if person is alive
-(define (is-alive? entry)   
-  (null? (cadr (caddr entry))))   ; Checks that there is no death date
+(define (is-alive? profile)   
+  (null? (cadr (caddr profile))))   ; Checks that there is no death date
 
 ;; A1
 ; This function returns all the living people in a branch
@@ -85,22 +85,22 @@
 ;; A2
 ; This function returns all living members of a branch
 (define (living-members lst)
-  ; Filter extracts only the living people's entry, then mapping car to each entry returns the names
+  ; Filter extracts only the living people's profile, then mapping car to each profile returns the names
   (map car (filter is-alive? lst)))   
 
 ;; A3
 ; This function returns the age of all living members in a branch
 (define (current-age lst)
-  (define (calc-age entry)
-    (- 2025 (caddr (car (caddr entry)))))
+  (define (calc-age profile)
+    (- 2025 (caddr (car (caddr profile)))))
 
   (map calc-age (filter is-alive? lst)))
   
 ;; A4
 ; This function returns all people with the same given birth month 
 (define (same-birthday-month lst month)
-  (map car (filter (lambda (entry)
-            (equal? month (cadr (car (caddr entry))))) 
+  (map car (filter (lambda (profile)
+            (equal? month (cadr (car (caddr profile))))) 
 	lst)))
 
   
@@ -108,8 +108,8 @@
 ; This function returns all people alphabetically sorted by their last name
 (define (sort-by-last lst)
   ; Converts Last name to a string to allow for comparison
-  (define (name-to-string entry)
-    (symbol->string (cadar entry)))   
+  (define (name-to-string profile)
+    (symbol->string (cadar profile)))   
 
   ; Uses sort and helper function to sort the names in ascending order
   (map car (sort lst (λ (name1 name2)
@@ -121,17 +121,17 @@
   ; Helper function that either replaces the given name, or preserves the profile
   (define (replace-name name)
     (if (and (not (null? name ))(equal? (car name) old-name))  ; If the list is filled and the first name is the given old-name 
-        (cons new-name (cdr name))  ; Replace only first name
-        name))  ; Otherwise, keep unchanged
+        (cons new-name (cdr name))  ; Concatenate the new first name and the second name
+        name))  ; Else, leave unchanged
 
   ; Function that calls the helper function on a child profile
-  (define (update-entry entry)
-    (list (replace-name (car entry))   ; Call replace-name on child list
-          (map replace-name (cadr entry))  ; Call replace-name on parents list
-            (caddr entry)))  ; Add the dates back in
+  (define (update-profile profile)
+    (list (replace-name (car profile))   ; Call replace-name on child list
+          (map replace-name (cadr profile))  ; Call replace-name on parents list
+            (caddr profile)))  ; Add the dates back in
 
   ; Maps the update function to each profile in the branch
-  (map update-entry lst)) 
+  (map update-profile lst)) 
  
 
 ; Util functions
@@ -236,62 +236,93 @@
            item))
      lst))
 
+;; Display
 ; C1
+(display "C1:\n")
 (display "Mother's side:\n")
 (lst-mb Mb)
+(newline)
 
 ; C2
+(display "C2:\n")
 (display "Father's side:\n")
 (lst-pb Pb)
+(newline)
 
 ; C3
+(display "C3:\n")
 (display "Combined mother's and father's:\n")
 (lst-all Mb Pb)
+(newline)
 
 ; A1
+(display "A1:\n") 
 (display "Parents:\n")
 (parents Mb)
+(newline)
 
 ; A2
+(display "A2:\n")
 (display "Living member members:\n")
 (living-members Mb)
+(newline)
 
 ; A3
+(display "A3:\n")
 (display "Current age of living family members:\n")
 (current-age Mb)
+(newline)
 
 ; A4
+(display "A4:\n")
 (display "People born on X month:\n")
 (same-birthday-month Mb 5)
+(newline)
 
 ; A5
+(display "A5:\n")
 (display "Sorted by last name:\n")
 (sort-by-last Mb)
+(newline)
 
 ; A6
+(display "A6:\n")
 (display "Changed name to Juan from John:\n")
 (change-name-to-Juan Mb 'John 'Juan)
+(newline)
 
 ; B1
+(display "B1:\n")
 (display "Children:\n")
 (map car (children Mb))
+(newline)
 
 ; B2
+(display "B2:\n")
 (display "Oldest living member:\n")
 (car (oldest-living-member Mb))
+(newline)
 
 ; B3
+(display "B3:\n")
 (display "Average age of death:\n")
 (average-age-on-death Mb)
+(newline)
 
 ; B4
+(display "B4:\n")
 (display "People born on X month:\n")
 (map car (birthday-month-same Mb 5))
+(newline)
 
 ; B5
+(display "B5:\n")
 (display "Sorted by first name:\n")
 (map car (sort-by-first Mb))
+(newline)
 
 ; B6
+(display "B6:\n")
 (display "Changed name to Mary from Maria:\n")
 (map car (change-name-to-Maria Mb 'Mary 'Maria))
+(newline)
