@@ -1,3 +1,4 @@
+#lang racket
 (require lang/plt-pretty-big-text)
 
 ;;Your full name: 
@@ -9,83 +10,132 @@
 
 ;;Maternal branch
 (define Mb
-'(((Mary Blake) ((Ana Ali) (Theo Blake)) ((17 9 2022) ()))
-((Ana Ali) ((Ada West) (Md Ali)) ((4 10 1995) ()))
-((Theo Blake) ((Mary Jones) (Tom Blake)) ((9 5 1997) ()))
-((Greta Blake) ((Mary Jones) (Tom Blake)) ((16 3 1999) ()))
-((Mary Jones) (() ())((12 5 1967) (19 5 2024)))
-((Tom Blake) (() ()) ((17 1 1964) ()))
-((Ada West) (() ()) ((22 8 1973) ()))
-((Md Ali) (() ()) ((14 2 1972) (2 5 2023)))
-((Ned Bloom) (() ()) ((23 04 2001)()))
-((John Bloom) ((Greta Blake) (Ned Bloom)) ((5 12 2023) ()))))
+  '(((Mary Blake) ((Ana Ali) (Theo Blake)) ((17 9 2022) ()))
+  ((Ana Ali) ((Ada West) (Md Ali)) ((4 10 1995) ()))
+  ((Theo Blake) ((Mary Jones) (Tom Blake)) ((9 5 1997) ()))
+  ((Greta Blake) ((Mary Jones) (Tom Blake)) ((16 3 1999) ()))
+  ((Mary Jones) (() ())((12 5 1967) (19 5 2024)))
+  ((Tom Blake) (() ()) ((17 1 1964) ()))
+  ((Ada West) (() ()) ((22 8 1973) ()))
+  ((Md Ali) (() ()) ((14 2 1972) (2 5 2023)))
+  ((Ned Bloom) (() ()) ((23 04 2001)()))
+  ((John Bloom) ((Greta Blake) (Ned Bloom)) ((5 12 2023) ())))
+)
 
-;,Paternal branch
 (define Pb
-'(((John Smith) ((Jane Doe) (Fred Smith)) ((1 12 1956) (3 3 2021))) 
-((Ana Smith) ((Jane Doe) (Fred Smith)) ((6 10 1958) ()))
-((Jane Doe) ((Eve Talis) (John Doe)) ((2 6 1930) (4 12 1992)))
-((Fred Smith) ((Lisa Brown) (Tom Smith)) ((17 2 1928) (13 9 2016)))
-((Eve Talis) (() ()) ((15 5 1900) (19 7 1978)))
-((John Doe) (() ()) ((18 2 1899)(7 7 1970)))
-((Lisa Brown) (() ())((31 6 1904) (6 3 1980)))
-((Tom Smith) (() ()) ((2 8 1897) (26 11 1987)))
-((Alan Doe) ((Eve Talis) (John Doe)) ((8 9 1932) (23 12 2000)))
-((Mary Doe) (() (Alan Doe)) ((14 4 1964) ()))))
-
-;;define lst-mb
-;;define lst-pb
-;;define lst-all
+  '(((John Smith) ((Jane Doe) (Fred Smith)) ((1 12 1956) (3 3 2021))) 
+    ((Ana Smith) ((Jane Doe) (Fred Smith)) ((6 10 1958) ()))
+    ((Jane Doe) ((Eve Talis) (John Doe)) ((2 6 1930) (4 12 1992)))
+    ((Fred Smith) ((Lisa Brown) (Tom Smith)) ((17 2 1928) (13 9 2016)))
+    ((Eve Talis) (() ()) ((15 5 1900) (19 7 1978)))
+    ((John Doe) (() ()) ((18 2 1899)(7 7 1970)))
+    ((Lisa Brown) (() ())((31 6 1904) (6 3 1980)))
+    ((Tom Smith) (() ()) ((2 8 1897) (26 11 1987)))
+    ((Alan Doe) ((Eve Talis) (John Doe)) ((8 9 1932) (23 12 2000)))
+    ((Mary Doe) (() (Alan Doe)) ((14 4 1964) ())))
+)
 
 ;; C1
-; Print the first and last name of for each person (maternal branch)
+; Returns the first and last names of each person in the maternal branch
 (define (lst-mb mb)
   (if (null? mb)
     ()
     (cons (caar mb) (lst-mb (cdr mb)))))
  
 ;; C2
-; Print the first and last name of for each person (paternal branch)
+; Returns the first and last name of for each person in the paternal branch
 (define (lst-pb pb)
   (if (null? pb)
   ()
   (cons (caar pb) (lst-pb (cdr pb)))))
   
 ;; C3
-; Print the names for the both maternal and paternal branches
+; Return the names for both the maternal and paternal branches
 (define (append-lst list1 list2)
   (if (null? list1)
     list2
-    (cons (lst-mb list1) (lst-pb list2)))
-  )
+    (cons (lst-mb list1) (lst-pb list2))))
 			
+; Returns the list's combined
 (define (lst-all mb pb)
   (append-lst mb pb))
 
+;; HELPER FUNCTIONS:
+
+; Duplicate Deletion
+(define (delete-dup x)
+    (if (null? x) '()
+        (cons (car x) (delete-dup (filter (lambda (y) (not (equal? y (car x))))
+                                          (cdr x))))))
+
+; Function to check if person is alive
+(define (is-alive? entry)   
+  (null? (cadr (caddr entry))))   ; Checks that there is no death date
+
 ;; A1
-(define (parents lst)
-  ())
-  
+; This function returns all the living people in a branch
+(define (parents lst)   
+  (delete-dup   ; Calling helper function
+   (apply append                          
+           (map (lambda (person)   ; Applies lambda func to each sublist
+                  (let ((parent-pair (cadr person)))   ; Accesses parents in the sublist
+                    (filter (lambda (x) (not (null? x))) parent-pair)))   ; Removes empty lists if present in parents list
+                lst))))
+
 ;; A2
+; This function returns all living members of a branch
 (define (living-members lst)
-  ())
-  
+  ; Filter extracts only the living people's entry, then mapping car to each entry returns the names
+  (map car (filter is-alive? lst)))   
+
 ;; A3
+; This function returns the age of all living members in a branch
 (define (current-age lst)
-  ())
+  (define (calc-age entry)
+    (- 2025 (caddr (car (caddr entry)))))
+
+  (map calc-age (filter is-alive? lst)))
   
 ;; A4
+; This function returns all people with the same given birth month 
 (define (same-birthday-month lst month)
-  ())
+  (map car (filter (lambda (entry)
+            (equal? month (cadr (car (caddr entry))))) 
+	lst)))
+
   
 ;; A5
+; This function returns all people alphabetically sorted by their last name
 (define (sort-by-last lst)
-  ())
-  
+  ; Converts Last name to a string to allow for comparison
+  (define (name-to-string entry)
+    (symbol->string (cadar entry)))   
+
+  ; Uses sort and helper function to sort the names in ascending order
+  (map car (sort lst (λ (name1 name2)
+            (string<? (name-to-string name1) (name-to-string name2))))))
+
 ;; A6
+; This function returns the given branch, switching the name 'John' with 'Juan' if it appears
 (define (change-name-to-Juan lst old-name new-name)
-  ())
+  (map (lambda (name)
+	; If the current name is the name you wish to swap
+        (if (equal? (caar name) old-name)
+	    	     ; Reformats the list structure, replacing the old name with the new name
+                     (list (list new-name (cadar name)) (cadr name) (caddr name))
+                     name)) 
+         lst))
  
+
+; Util functions
+; Remove duplicated items from the list
+(define (delete-duplicates lst)
+  ; Check for base case
+  (if (null? lst)
+      '()
+      (cons (car lst)
+            (delete-duplicates (filter (λ (x) (not (equal? x (car lst)))) (cdr lst))))))
+
 ; B1 - Get all children (non-orphaned people from the list)
 (define (children people-list)
   ; Find all people who are parents
@@ -103,14 +153,6 @@
     ; Remove duplicate children
     (delete-duplicates children-list)))
 
-; Remove duplicated items from the list
-(define (delete-duplicates lst)
-  ; Check for base case
-  (if (null? lst)
-      '()
-      (cons (car lst)
-            (delete-duplicates (filter (λ (x) (not (equal? x (car lst)))) (cdr lst))))))
-
 ;; B2 - Get the oldest still living family member from the list
 (define (oldest-living-member lst)
   ; Filter out all deceased people
@@ -127,15 +169,13 @@
                 (month-2 (list-ref (list-ref (list-ref person-2 2) 0) 1))
                 (year-2 (list-ref (list-ref (list-ref person-2 2) 0) 2)))
             ; Check which year is first, month and then day
-            (if (< year-1 year-2)
-                #t
-                (if (> year-1 year-2)
-                    #f
-                    (if (< month-1 month-2)
-                        #t
-                        (if (> month-1 month-2)
-                            #f
-                            (< day-1 day-2)))))))))
+                (cond
+                  ((< year-1 year-2) #t)
+                  ((> year-1 year-2) #f)
+                  ((< month-1 month-2) #t)
+                  ((> month-1 month-2) #f)
+                  ((< day-1 day-2) #t)
+                  ((> day-1 day-2) #f))))))
 
   ; Return the first element in the list
   (car (sort-list-by-DOB (only-living-people lst)))
@@ -149,7 +189,7 @@
 
   ; Calculate average age for all deceased people
   (let ((deceased (only-deceased-people lst)))
-         ; Combined age of everyone
+         ; Adds everyone's age together
         (let ((combined-age
                 (apply + (map (λ (person)
                                 (- (list-ref (list-ref (list-ref person 2) 1) 2) ; Death year
@@ -162,7 +202,7 @@
 (define (birthday-month-same lst month)
   ; Use filter to remove all people who do not match the provided month
   (filter (λ (person)
-            ; Check birthday is provided month
+            ; Check the month against the month to filter for
             (if (not (null? (caaddr person)))
                 (equal? (cadr (caaddr person)) month)
                 #f))
@@ -189,12 +229,6 @@
            item))
      lst))
 
-;;You should include code to execute each of your functions below.
-(define ESC #\033)
-(define CSI (list->string (list ESC #\[ )))
-(define CLEAR (string-append CSI "2J"))
-(display CLEAR)
-
 ; C1
 (display "Mother's side:\n")
 (lst-mb Mb)
@@ -207,13 +241,37 @@
 (display "Combined mother's and father's:\n")
 (lst-all Mb Pb)
 
+; A1
+(display "Parents:\n")
+(parents Mb)
+
+; A2
+(display "Living member members:\n")
+(living-members Mb)
+
+; A3
+(display "Current age of living family members:\n")
+(current-age Mb)
+
+; A4
+(display "People born on X month:\n")
+(same-birthday-month Mb 5)
+
+; A5
+(display "Sorted by last name:\n")
+(sort-by-last Mb)
+
+; A6
+(display "Changed name to Juan from John:\n")
+(change-name-to-Juan Mb 'John 'Juan)
+
 ; B1
 (display "Children:\n")
-(children Mb)
+(map car (children Mb))
 
 ; B2
 (display "Oldest living member:\n")
-(oldest-living-member Mb)
+(car (oldest-living-member Mb))
 
 ; B3
 (display "Average age of death:\n")
@@ -221,12 +279,12 @@
 
 ; B4
 (display "People born on X month:\n")
-(birthday-month-same Mb 5)
+(map car (birthday-month-same Mb 5))
 
 ; B5
 (display "Sorted by first name:\n")
-(sort-by-first Mb)
+(map car (sort-by-first Mb))
 
 ; B6
-(display "Changed name to Maria from Mary:\n")
-(change-name-to-Maria Mb 'Mary 'Maria)
+(display "Changed name to Mary from Maria:\n")
+(map car (change-name-to-Maria Mb 'Mary 'Maria))
