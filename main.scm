@@ -118,13 +118,20 @@
 ;; A6
 ; This function returns the given branch, switching the name 'John' with 'Juan' if it appears
 (define (change-name-to-Juan lst old-name new-name)
-  (map (lambda (name)
-	; If the current name is the name you wish to swap
-        (if (equal? (caar name) old-name)
-	    	     ; Reformats the list structure, replacing the old name with the new name
-                     (list (list new-name (cadar name)) (cadr name) (caddr name))
-                     name)) 
-         lst))
+  ; Helper function that either replaces the given name, or preserves the profile
+  (define (replace-name name)
+    (if (and (not (null? name ))(equal? (car name) old-name))  ; If the list is filled and the first name is the given old-name 
+        (cons new-name (cdr name))  ; Replace only first name
+        name))  ; Otherwise, keep unchanged
+
+  ; Function that calls the helper function on a child profile
+  (define (update-entry entry)
+    (list (replace-name (car entry))   ; Call replace-name on child list
+          (map replace-name (cadr entry))  ; Call replace-name on parents list
+            (caddr entry)))  ; Add the dates back in
+
+  ; Maps the update function to each profile in the branch
+  (map update-entry lst)) 
  
 
 ; Util functions
