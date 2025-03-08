@@ -335,5 +335,5 @@
 ; B6
 (display "B6:\n")
 (display "Changed name to Mary from Maria:\n")
-(display(change-name-to-Maria Mb 'Mary 'Maria))
+(change-name-to-Maria Mb 'Mary 'Maria)
 (newline)
