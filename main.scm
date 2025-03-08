@@ -112,7 +112,7 @@
     (symbol->string (cadar profile)))   
 
   ; Uses sort and helper function to sort the names in ascending order
-  (map car (sort lst (λ (name1 name2)
+  (map car (sort lst (lambda (name1 name2)
             (string<? (name-to-string name1) (name-to-string name2))))))
 
 ;; A6
