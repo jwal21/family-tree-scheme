@@ -22,6 +22,7 @@
   ((John Bloom) ((Greta Blake) (Ned Bloom)) ((5 12 2023) ())))
 )
 
+; Paternal branch
 (define Pb
   '(((John Smith) ((Jane Doe) (Fred Smith)) ((1 12 1956) (3 3 2021))) 
     ((Ana Smith) ((Jane Doe) (Fred Smith)) ((6 10 1958) ()))
@@ -227,14 +228,24 @@
   
 ;; B6 - Update the first name of all people called X to Y
 (define (change-name-to-Maria lst old-name new-name)
-; Apply the name substitution to each item in the list
-(map (λ (item)
-       ; If the name is X, create a new person in their place with the name Y
-       ; Else returns unmodified person
-       (if (equal? (car (car item)) old-name)
-           (list (list new-name (cdr (car item))) (cadr item) (caddr item))
-           item))
-     lst))
+  ; Iterate over all the family members in the list
+  (map (λ (entry)
+         ; Get all elements of each entry
+         (let ((person-name (car entry)) ; Name of the person
+               (parent-names (cadr entry)) ; Parents names
+               (dates (caddr entry))) ; DOB and DOD
+            ; Check if the name of the person is the old-name, replace with new-name
+           (list (if (and (not (null? person-name)) (equal? (car person-name) old-name))
+                     (cons new-name (cdr person-name))
+                     person-name)
+                  ; Do the same for the parents
+                 (map (λ (names-of-parents)
+                        (if (and (not (null? names-of-parents)) (equal? (car names-of-parents) old-name))
+                            (cons new-name (cdr names-of-parents))
+                            names-of-parents))
+                      parent-names)
+                 dates)))
+       lst))
 
 ;; Display
 ; C1
@@ -294,7 +305,7 @@
 ; B1
 (display "B1:\n")
 (display "Children:\n")
-(map car (children Mb))
+(children Mb)
 (newline)
 
 ; B2
@@ -324,5 +335,5 @@
 ; B6
 (display "B6:\n")
 (display "Changed name to Mary from Maria:\n")
-(map car (change-name-to-Maria Mb 'Mary 'Maria))
+(display(change-name-to-Maria Mb 'Mary 'Maria))
 (newline)
