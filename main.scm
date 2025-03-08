@@ -73,7 +73,7 @@
   (null? (cadr (caddr profile))))   ; Checks that there is no death date
 
 ;; A1
-; This function returns all the living people in a branch
+; This function returns all the parents in a branch
 (define (parents lst)   
   (delete-dup   ; Calling helper function
    (apply append                          
