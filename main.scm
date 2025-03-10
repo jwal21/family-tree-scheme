@@ -1,6 +1,3 @@
-#lang racket
-(require lang/plt-pretty-big-text)
-
 ;;Your full name: 
 ;;Student ID: 
 ;;Date of birth (day/month/year): 
@@ -135,31 +132,13 @@
   (map update-profile lst)) 
  
 
-; Util functions
-; Remove duplicated items from the list
-(define (delete-duplicates lst)
-  ; Check for base case
-  (if (null? lst)
-      '()
-      (cons (car lst)
-            (delete-duplicates (filter (λ (x) (not (equal? x (car lst)))) (cdr lst))))))
-
 ; B1 - Get all children (non-orphaned people from the list)
 (define (children people-list)
-  ; Find all people who are parents
-  (let ((parents-list (apply append (map (λ (person) (cadr person)) people-list)))
-        (children-list '()))
-
-    ; Iterate over all everyone, checking if they are orphaned in the tree
-    (for-each
-      (λ (person)
-        ; Append the person if they're a child
-        (if (member (car person) parents-list)
-            (set! children-list (cons person children-list))))
-      people-list)
-
-    ; Remove duplicate children
-    (delete-duplicates children-list)))
+  (filter (λ (person)
+    ; Retrieve the parents from the list
+    (let ((parent-list (cadr person)))
+      ; Check at least one parent is given
+      (or (not (null? (car parent-list ))) (not (null? (cadr parent-list )))))) people-list))
 
 ;; B2 - Get the oldest still living family member from the list
 (define (oldest-living-member lst)
@@ -311,7 +290,7 @@
 ; B1
 (display "B1:\n")
 (display "Children:\n")
-(children Pb)
+(map car (children Pb))
 (newline)
 
 ; B2
@@ -341,5 +320,5 @@
 ; B6
 (display "B6:\n")
 (display "Changed name to Mary from Maria:\n")
-(change-name-to-Maria Pb 'Mary 'Maria)
+(change-name-to-Maria Pb 'Mary 'Maria) ; DO not use map car as for testing, checking names are changed for parents is needed
 (newline)
