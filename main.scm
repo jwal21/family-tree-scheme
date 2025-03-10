@@ -83,22 +83,22 @@
 ;; A2
 ; This function returns all living members of a branch
 (define (living-members lst)
-  ; Filter extracts only the living people's profile, then mapping car to each profile returns the names
+  ; Filter extracts only the living people's profile, then mapping car to each profile returns the list of names
   (map car (filter is-alive? lst)))   
 
 ;; A3
 ; This function returns the age of all living members in a branch
 (define (current-age lst)
   (define (calc-age profile)
-    (- 2025 (caddr (car (caddr profile)))))
+    (- 2025 (caddr (car (caddr profile)))))  ; Calculates age by subtracting current year by Year of Birth	
 
-  (map calc-age (filter is-alive? lst)))
+  (map calc-age (filter is-alive? lst)))  ; Performs the age calculation on the filtered list of living people
   
 ;; A4
 ; This function returns all people with the same given birth month 
 (define (same-birthday-month lst month)
-  (map car (filter (lambda (profile)
-            (equal? month (cadr (car (caddr profile))))) 
+  (map car (filter (lambda (profile)  ; Takes the names of the desired profiles  
+            (equal? month (cadr (car (caddr profile))))) ;Checks if profile has matching birth month
 	lst)))
 
   
