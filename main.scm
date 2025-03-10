@@ -52,10 +52,10 @@
   
 ;; C3
 ; Return the names for both the maternal and paternal branches
-(define (append-lst list1 list2)
-  (if (null? list1)
-    list2
-    (cons (lst-mb list1) (lst-pb list2))))
+(define (append-lst lst1 lst2)
+  (if (null? lst1)
+    lst2
+    (cons (lst-mb lst1) (lst-pb lst2))))
 			
 ; Returns the list's combined
 (define (lst-all mb pb)
@@ -265,6 +265,7 @@
 (display "Combined mother's and father's:\n")
 (lst-all Mb Pb)
 (newline)
+
 
 ; A1
 (display "A1:\n") 
