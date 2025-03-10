@@ -320,5 +320,5 @@
 ; B6
 (display "B6:\n")
 (display "Changed name to Mary from Maria:\n")
-(change-name-to-Maria Pb 'Mary 'Maria) ; DO not use map car as for testing, checking names are changed for parents is needed
+(change-name-to-Maria Pb 'Mary 'Maria) ; Do not use (map car) since testing requires making sure parent names are updated too
 (newline)
