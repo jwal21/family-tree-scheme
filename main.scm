@@ -266,6 +266,8 @@
 (lst-all Mb Pb)
 (newline)
 
+; Section A
+(display "Section A using Mb for testing:\n")
 
 ; A1
 (display "A1:\n") 
@@ -303,38 +305,41 @@
 (change-name-to-Juan Mb 'John 'Juan)
 (newline)
 
+; Section B
+(display "Section B using Pb for testing:\n")
+
 ; B1
 (display "B1:\n")
 (display "Children:\n")
-(children Mb)
+(children Pb)
 (newline)
 
 ; B2
 (display "B2:\n")
 (display "Oldest living member:\n")
-(car (oldest-living-member Mb))
+(car (oldest-living-member Pb))
 (newline)
 
 ; B3
 (display "B3:\n")
 (display "Average age of death:\n")
-(average-age-on-death Mb)
+(average-age-on-death Pb)
 (newline)
 
 ; B4
 (display "B4:\n")
-(display "People born on X month:\n")
-(map car (birthday-month-same Mb 5))
+(display "People born on the fifth month:\n")
+(map car (birthday-month-same Pb 5))
 (newline)
 
 ; B5
 (display "B5:\n")
 (display "Sorted by first name:\n")
-(map car (sort-by-first Mb))
+(map car (sort-by-first Pb))
 (newline)
 
 ; B6
 (display "B6:\n")
 (display "Changed name to Mary from Maria:\n")
-(change-name-to-Maria Mb 'Mary 'Maria)
+(change-name-to-Maria Pb 'Mary 'Maria)
 (newline)
