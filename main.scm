@@ -256,7 +256,7 @@
 
 ; A2
 (display "A2:\n")
-(display "Living member members:\n")
+(display "Living members:\n")
 (living-members Mb)
 (newline)
 
